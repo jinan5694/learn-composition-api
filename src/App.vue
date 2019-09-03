@@ -1,28 +1,34 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <button @click="increment">
+      Count is: {{ state.count }}, double is: {{ state.double }}
+    </button>
+    <div>{{x}}</div>
+    <div>{{y}}</div>
   </div>
 </template>
-
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { reactive, computed } from '@vue/composition-api'
+import { useMousePosition } from './components/position'
 
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
+  setup () {
+    const { x, y } = useMousePosition()
+    const state = reactive({
+      count: 0,
+      double: computed(() => state.count * 2)
+    })
+
+    function increment () {
+      state.count++
+    }
+
+    return {
+      state,
+      increment,
+      x,
+      y
+    }
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
